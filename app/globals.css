@@ -1,0 +1,126 @@
+/**
+ * Imperial Cloud — Hybrid theme tokens.
+ *
+ * KEY ARCHITECTURE:
+ *  • SHELL tokens (--ic-shell-*) are defined ONCE on .app-shell and never
+ *    change. The sidebar/nav/brand read these — permanently dark.
+ *  • WORKSPACE tokens (--ic-ws-*) are defined under [data-theme="dark"] and
+ *    [data-theme="light"], scoped to the .workspace element. next-themes sets
+ *    the theme; only the workspace subtree consumes it.
+ *
+ * Because the workspace carries its own data-theme attribute, the theme toggle
+ * cannot affect the shell even in principle — they read different variables.
+ */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── SHELL: constant dark identity ───────────────────────────────────── */
+.app-shell {
+  --ic-shell-bg: #07101F;
+  --ic-shell-surface: #0B1426;
+  --ic-shell-elevated: #111C31;
+  --ic-shell-elevated-hover: #16233C;
+  --ic-shell-border: rgba(255,255,255,0.05);
+  --ic-shell-border-strong: rgba(255,255,255,0.10);
+  --ic-shell-text: #F8FAFC;
+  --ic-shell-text-2: #94A3B8;
+  --ic-shell-text-3: #5A6B82;
+  --ic-shell-brand: #1848C0;
+  --ic-shell-brand-bright: #186CE4;
+  --ic-shell-brand-glow: rgba(24,108,228,0.18);
+  --ic-shell-brand-ring: rgba(24,108,228,0.45);
+  --ic-shell-brand-muted: rgba(24,108,228,0.14);
+  --ic-shell-flame: #F0A830;
+  --ic-shell-flame-muted: rgba(240,168,48,0.14);
+  --ic-shell-glass: rgba(11,20,38,0.72);
+}
+
+/* ── WORKSPACE: adaptive. Default (dark) ──────────────────────────────── */
+.workspace,
+[data-theme="dark"] .workspace,
+.workspace[data-theme="dark"] {
+  --ic-ws-bg: #040B18;
+  --ic-ws-surface: #0B1426;
+  --ic-ws-elevated: #111C31;
+  --ic-ws-elevated-hover: #16233C;
+  --ic-ws-border: rgba(255,255,255,0.06);
+  --ic-ws-border-strong: rgba(255,255,255,0.11);
+  --ic-ws-text: #F8FAFC;
+  --ic-ws-text-2: #94A3B8;
+  --ic-ws-text-3: #5A6B82;
+  --ic-ws-brand: #1848C0;
+  --ic-ws-brand-bright: #186CE4;
+  --ic-ws-brand-hover: #2E86E0;
+  --ic-ws-brand-glow: rgba(24,108,228,0.16);
+  --ic-ws-brand-ring: rgba(24,108,228,0.45);
+  --ic-ws-brand-muted: rgba(24,108,228,0.12);
+  --ic-ws-flame: #F0A830;
+  --ic-ws-flame-deep: #E49018;
+  --ic-ws-flame-muted: rgba(240,168,48,0.14);
+  --ic-ws-success: #34D399;
+  --ic-ws-error: #F87171;
+  --ic-ws-shadow-resting: 0 1px 2px rgba(0,0,0,0.5);
+  --ic-ws-shadow-lifted: 0 8px 32px rgba(0,0,0,0.55);
+}
+
+/* ── WORKSPACE: light override ────────────────────────────────────────── */
+[data-theme="light"] .workspace,
+.workspace[data-theme="light"] {
+  --ic-ws-bg: #F5F7FA;
+  --ic-ws-surface: #FFFFFF;
+  --ic-ws-elevated: #FCFCFD;
+  --ic-ws-elevated-hover: #F1F4F8;
+  --ic-ws-border: rgba(15,23,42,0.08);
+  --ic-ws-border-strong: rgba(15,23,42,0.14);
+  --ic-ws-text: #0F172A;
+  --ic-ws-text-2: #475569;
+  --ic-ws-text-3: #94A3B8;
+  --ic-ws-brand: #1B4DB3;
+  --ic-ws-brand-bright: #1A5FCC;
+  --ic-ws-brand-hover: #1551B5;
+  --ic-ws-brand-glow: rgba(26,95,204,0.10);
+  --ic-ws-brand-ring: rgba(26,95,204,0.35);
+  --ic-ws-brand-muted: rgba(26,95,204,0.08);
+  --ic-ws-flame: #E08A12;
+  --ic-ws-flame-deep: #C9760A;
+  --ic-ws-flame-muted: rgba(224,138,18,0.12);
+  --ic-ws-success: #059669;
+  --ic-ws-error: #DC2626;
+  --ic-ws-shadow-resting: 0 1px 2px rgba(15,23,42,0.06), 0 1px 3px rgba(15,23,42,0.04);
+  --ic-ws-shadow-lifted: 0 12px 32px rgba(15,23,42,0.10), 0 2px 8px rgba(15,23,42,0.06);
+}
+
+html, body { background: var(--ic-shell-bg); }
+
+/*
+ * Cinematic transition — applied ONLY to workspace descendants. The shell is
+ * deliberately excluded so it never animates (it never changes anyway).
+ */
+.workspace,
+.workspace *,
+.workspace *::before,
+.workspace *::after {
+  transition:
+    background-color var(--ic-theme-dur, 360ms) cubic-bezier(0.4,0,0.2,1),
+    border-color var(--ic-theme-dur, 360ms) cubic-bezier(0.4,0,0.2,1),
+    color var(--ic-theme-dur, 360ms) cubic-bezier(0.4,0,0.2,1),
+    box-shadow var(--ic-theme-dur, 360ms) cubic-bezier(0.4,0,0.2,1),
+    fill var(--ic-theme-dur, 360ms) cubic-bezier(0.4,0,0.2,1);
+}
+
+.ic-no-transition .workspace,
+.ic-no-transition .workspace * { transition: none !important; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
+::-webkit-scrollbar { width: 9px; height: 9px; }
+::-webkit-scrollbar-thumb { background: var(--ic-shell-border-strong); border-radius: 5px; }
+.workspace ::-webkit-scrollbar-thumb { background: var(--ic-ws-border-strong); }
