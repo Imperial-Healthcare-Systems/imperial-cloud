@@ -1,3 +1,4 @@
+import { Suspense } from 'react'
 import Link from 'next/link'
 import { Logo } from '@/components/theme/logo'
 import { SignupForm } from './signup-form'
@@ -26,7 +27,14 @@ export default function SignupPage() {
       <p className="text-sm text-center mb-7" style={{ color: 'var(--ic-ws-text-2)' }}>
         Spin up an Imperial Cloud workspace in seconds.
       </p>
-      <SignupForm />
+      {/*
+        SignupForm calls useSearchParams() to read ?email= and ?next=. The
+        Suspense wrapper lets Next 14 statically prerender the page shell;
+        without it Vercel's export step fails for /signup.
+      */}
+      <Suspense fallback={null}>
+        <SignupForm />
+      </Suspense>
       <p className="text-xs text-center mt-7" style={{ color: 'var(--ic-ws-text-2)' }}>
         Already have an account?{' '}
         <Link href="/login" className="underline underline-offset-2" style={{ color: 'var(--ic-ws-brand-bright)' }}>

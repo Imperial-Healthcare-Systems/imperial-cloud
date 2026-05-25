@@ -1,3 +1,4 @@
+import { Suspense } from 'react'
 import { Logo } from '@/components/theme/logo'
 import { LoginForm } from './login-form'
 
@@ -25,7 +26,14 @@ export default function LoginPage() {
       <p className="text-sm text-center mb-8" style={{ color: 'var(--ic-ws-text-2)' }}>
         Sign in to your Imperial Cloud workspace
       </p>
-      <LoginForm />
+      {/*
+        LoginForm uses useSearchParams() to read ?next=. Wrapping in Suspense
+        keeps this page statically prerenderable on Vercel — without it, the
+        export step bails on /login.
+      */}
+      <Suspense fallback={null}>
+        <LoginForm />
+      </Suspense>
     </div>
   )
 }
