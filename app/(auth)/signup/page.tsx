@@ -5,6 +5,10 @@ import { SignupForm } from './signup-form'
 
 export const metadata = { title: 'Create account · Imperial Cloud' }
 
+// The form reads ?email= and ?next= via useSearchParams. Per-request rendering
+// keeps the Vercel export step from trying to materialize this as static HTML.
+export const dynamic = 'force-dynamic'
+
 export default function SignupPage() {
   return (
     <div

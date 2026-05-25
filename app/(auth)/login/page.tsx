@@ -4,6 +4,10 @@ import { LoginForm } from './login-form'
 
 export const metadata = { title: 'Sign in · Imperial Cloud' }
 
+// The form reads ?next= via useSearchParams. Per-request rendering keeps the
+// Vercel export step from trying to materialize this as static HTML.
+export const dynamic = 'force-dynamic'
+
 export default function LoginPage() {
   return (
     <div
